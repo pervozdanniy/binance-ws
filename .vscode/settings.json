@@ -1,0 +1,20 @@
+{
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.preferences.importModuleSpecifierEnding": "minimal",
+    "typescript.preferences.importModuleSpecifierEnding": "minimal",
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "explorer.excludeGitIgnore": false,
+    "eslint.validate": ["typescript"],
+    "prettier.requireConfig": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true,
+    },
+    "files.eol": "\n",
+    "eslint.debug": false,
+    "eslint.format.enable": false,
+    "eslint.run": "onSave",
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "prettier.configPath": ".prettierrc",
+    "editor.formatOnSave": true
+}

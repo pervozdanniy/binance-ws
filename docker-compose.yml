@@ -1,0 +1,68 @@
+version: "3.9"
+services:
+  app:
+    deploy:
+      mode: replicated
+      replicas: 5
+      endpoint_mode: dnssr
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src
+      - /usr/src/node_modules
+    networks:
+      - backend
+    # ports:
+    #   - ${APP_LOCAL_PORT}:3000
+    env_file:
+      - .env
+    command: "start --debug --watch"
+    # depends_on:
+    #   postgres:
+    #     condition: service_healthy
+    #   redis:
+    #     condition: service_healthy
+
+  redis:
+    image: "redis:alpine"
+    restart: always
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+    networks:
+      - backend
+    ports:
+      - ${REDIS_PORT}:6379
+
+  postgres:
+    image: "postgres:alpine"
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-U",
+          "${POSTGRES_USER}",
+          "--dbname=${POSTGRES_DB}"
+        ]
+    networks:
+      - backend
+    ports:
+      - ${DB_LOCAL_PORT}:5432
+
+networks:
+  backend:
+
+
+volumes:
+  pg-data:
+  redis-data:
